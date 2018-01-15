@@ -1,0 +1,6 @@
+Flask
+Flask-Admin
+Flask-Script
+flask_sqlalchemy
+flask_security
+pymysql
