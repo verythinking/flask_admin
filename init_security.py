@@ -18,5 +18,6 @@ class InitSecurity(Security):
                                                    **kwargs)
         return state
 
+
 # 实例化security
 sec = InitSecurity()
