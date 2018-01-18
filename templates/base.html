@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% import 'admin/layout.html' as layout with context -%}
 
 <!DOCTYPE html>
 
@@ -31,6 +31,8 @@
             rel="stylesheet" type="text/css" />
         <link href="{{ url_for('static', filename='global/plugins/bootstrap/css/bootstrap.min.css') }}"
             rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}"
+            rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="{{ url_for('static', filename='global/css/components.min.css') }}"
@@ -53,7 +55,7 @@
             {% endfor %}
         {% endif %}
     {% endblock %}
-<!-- END HEAD -->
+    <!-- END HEAD -->
     {% block head %}
     {% endblock %}
     {% block head_tail %}
