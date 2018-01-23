@@ -2,6 +2,8 @@
 
 """ 相关常量 """
 
-NAME = '悟禅'.decode('utf-8')
+NAME = u'悟禅'
 
-HOME = '首页'.decode('utf-8')
+HOME = u'首页'
+
+LOGIN_TITLE = u'登陆'

@@ -2,6 +2,7 @@
 
 from sqla import SqlaView
 from index import CustomIndexView
+from users import UsersView
 
 
-__all__ = ['CustomIndexView', 'SqlaView']
+__all__ = ['CustomIndexView', 'SqlaView', 'UsersView']

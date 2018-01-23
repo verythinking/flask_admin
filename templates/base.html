@@ -74,7 +74,7 @@
                 <div class="page-header-inner ">
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
-                        <a href="{{ url_for('.index') }}">
+                        <a href="{{ url_for('admin.index') }}">
                             <img src="{{ url_for('static', filename='layouts/layout/img/logo.png') }}" alt="logo" class="logo-default" /> </a>
                         <div class="menu-toggler sidebar-toggler">
                             <span></span>
@@ -118,6 +118,14 @@
             <!-- BEGIN CONTAINER -->
             <div class="page-container">
             {% block page_container %}
+                <div class="page-content-wrapper">
+                    <!-- BEGIN CONTENT -->
+                    <div class="page-content">
+                    {% block page_content %}
+                    {% endblock %}
+                    </div>
+                    <!-- END CONTENT -->
+                </div>
             {% endblock %}
             </div>
             <!-- END CONTAINER -->
