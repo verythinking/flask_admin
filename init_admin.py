@@ -4,9 +4,10 @@ from flask_admin import Admin
 from flask_admin.menu import MenuLink
 
 from init_db import db
-from models import Users
-from views import CustomIndexView
-from views import UsersView
+from app.models import Users
+from app.views import CustomIndexView
+from app.views import UsersView
+from global_cont import NAME
 
 
 class InitAdmin(Admin):
@@ -26,10 +27,12 @@ class InitAdmin(Admin):
         self.register_views()
 
         self.register_links()
-        import pdb; pdb.set_trace()
 
     def register_views(self):
         self.add_view(UsersView(Users, db.session))
 
     def register_links(self):
         self.add_link(MenuLink(name='login', endpoint='users.login'))
+
+
+admin = InitAdmin(name=NAME, template_mode='bootstrap3')

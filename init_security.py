@@ -2,7 +2,7 @@
 
 from flask_security import Security
 
-from models import datastore
+from app.models import datastore
 
 
 class InitSecurity(Security):
