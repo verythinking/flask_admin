@@ -19,8 +19,3 @@ class UsersLoginForm(LoginForm):
                                         get_form_field_label('password')})
     remember = BooleanField(get_form_field_label('remember_me'))
     submit = SubmitField(get_form_field_label('login'))
-
-    def __init__(self, *args, **kwargs):
-        self.email.fa = 'fa-envelope-o'
-        self.password.fa = 'fa-key'
-        super(UsersLoginForm, self).__init__(*args, **kwargs)

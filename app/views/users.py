@@ -1,10 +1,13 @@
 #! -*- coding:utf-8 -*-
 
+from flask import after_this_request
 from flask_admin import expose
 from flask_admin.helpers import get_form_data, get_redirect_target
+from flask_login import login_user
 from flask_security.decorators import anonymous_user_required
+from flask_security.views import _commit
 
-from forms import UsersLoginForm
+from app.forms import UsersLoginForm
 from . import SqlaView
 from global_cont import LOGIN_TITLE
 
@@ -45,7 +48,8 @@ class UsersView(SqlaView):
         form = self.login_form()
 
         if self.validate_form(form):
-            pass
+            login_user(form.user, remember=form.remember.data)
+            after_this_request(_commit)
 
         template = self.login_template
 

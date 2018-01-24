@@ -10,12 +10,14 @@ class DataBase(Command):
         初始化数据库
     """
     option_list = (
-        Option('--action', '-a', dest='action'),
+        Option('--command', '-c', dest='command'),
     )
 
-    def run(self, action):
-        if action == 'reset':
+    def run(self, command):
+        if command == 'reset':
             # 先清理数据库
+            print 'clear db......'
             db.drop_all()
             # 建立数据库表
+            print 'build db......'
             db.create_all()
