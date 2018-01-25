@@ -13,7 +13,7 @@
                     {% endfor %}
                 {% endif %}
 
-                {{ render_field_fa(field.type) }}
+                {{ render_fa(field.type) }}
 
             </div>
         </div>
@@ -47,8 +47,8 @@
 </div>
 {% endmacro %}
 
-
-{% macro render_field_fa(type) %}
+<!-- 登陆字段中的小图标定义 -->
+{% macro render_fa(type) %}
 
     {% if type == 'StringField' %}
         {% set fa = 'fa-envelope-o' %}
