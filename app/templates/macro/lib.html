@@ -9,16 +9,16 @@
 {% endmacro %}
 
 {# 带有图标的输入字段 #}
-{% macro field_with_addon(fa_addon=None, color=None, kwargs={}, direct_error=None) %}
+{% macro field_with_addon(field, fa_addon=None, color=None, kwargs={}, direct_error=None) %}
 
     {% call field_addon(fa_addon, color) %}
-        {{ gen_field(kwargs, direct_error) }}
+        {{ gen_field(field, kwargs, direct_error) }}
     {% endcall %}
 
 {% endmacro %}
 
 {# 一般的输入字段 #}
-{% macro gen_field(kwargs={}, direct_error=None) %}
+{% macro gen_field(field, kwargs={}, direct_error=None) %}
 
     {% set _dummy = kwargs.setdefault('class', 'form-control') %}
     {{ field(**kwargs)|safe }} 
@@ -50,9 +50,9 @@
         </label>
         <div class="col-md-9">
             {% if fa_addon %}
-                {{ field_with_addon(fa_addon, color, kwargs, direct_error) }}
+                {{ field_with_addon(field, fa_addon, color, kwargs, direct_error) }}
             {% else %}
-                {{ gen_field(kwargs, direct_error) }}
+                {{ gen_field(field, kwargs, direct_error) }}
             {% endif %}
         </div>
     </div>
@@ -60,32 +60,45 @@
 
 {# 渲染form表单主体 #}
 {% macro render_form_body(form) %}
-    {{ form.hidden_tag() }}
-    {% for field in form %}
-        {% set kwargs = {} %}
-        {% set color = 'font-blue' %}
-        {{ render_field(field, kwargs, form.fa_add[field], color)}}
-    {% endfor %}
+    {% if form.hidden_tag is defined %}
+        {{ form.hidden_tag() }}
+    {% else %}
+        {% if csrf_token %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% endif %}
+    {% endif %}
+    {% set kwargs = {} %}
+    {% if form.fa_add is defined %}
+        {% for field in form %}
+            {% set color = 'font-blue' %}
+            {{ render_field(field, kwargs, form.fa_add[field], color)}}
+        {% endfor %}
+    {% else %}
+        {% for field in form %}
+            {{ render_field(field, kwargs)}}
+        {% endfor %}
+    {% endif %}
 {% endmacro %}
 
 {# 渲染form表单botton #}
 {% macro render_form_botton(cancel_url) %}
     <div class="row">
         <div class="col-md-offset-4 col-md-8">
-            <button type="submit" class="btn blue mt-ladda-btn ladda-button btn-circle btn-outline" data-style="slide-up" data-spinner-color="#333">
+            <button type="submit" class="btn blue mt-ladda-btn ladda-button btn-outline" data-style="slide-up" data-spinner-color="#333">
                 <span class="ladda-label">
                     <i class="icon-layers"></i>
                     {{ _gettext('Submit') }}
                 </span>
                 <span class="ladda-spinner"></span>
             </button>
-            <button type="submit" class="btn blue mt-ladda-btn ladda-button btn-circle btn-outline" data-style="slide-up" data-spinner-color="#333">
+            <a type="button" class="btn red mt-ladda-btn ladda-button btn-outline"
+                data-style="slide-up" data-spinner-color="#333" href="{{ cancel_url }}">
                 <span class="ladda-label">
                     <i class="icon-layers"></i>
-                    <a href="{{ cancel_url }}">{{ _gettext('Cancel') }}</a>
+                    {{ _gettext('Cancel') }}
                 </span>
                 <span class="ladda-spinner"></span>
-            </button>
+            </a>
         </div>
     </div>
 {% endmacro %}

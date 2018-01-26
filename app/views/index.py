@@ -14,6 +14,6 @@ class CustomIndexView(AdminIndexView):
         """ 定义初始化参数 """
 
         url = '/'
-        template = 'test.html'
+        template = 'index.html'
         super(CustomIndexView, self).__init__(*args, url=url,
                                               template=template, **kwargs)

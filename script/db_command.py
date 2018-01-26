@@ -16,8 +16,8 @@ class DataBase(Command):
     def run(self, command):
         if command == 'reset':
             # 先清理数据库
-            print 'clear db......'
+            print 'clear database......'
             db.drop_all()
             # 建立数据库表
-            print 'build db......'
+            print 'build database......'
             db.create_all()

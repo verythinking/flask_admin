@@ -19,7 +19,8 @@ class UsersView(SqlaView):
     """
 
     login_template = 'users/login.html'
-    register_template = 'user/register.html'
+    register_template = 'users/register.html'
+    create_template = 'users/register.html'
 
     def _refresh_forms_cache(self):
 
