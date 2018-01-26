@@ -1,0 +1,190 @@
+{# input添加图标 #}
+{% macro field_addon(fa_addon=None, color=None) %}
+    <div class="input-group">
+        <span class="input-group-addon">
+            <i class="fa {{ fa_addon }} {{ color }}"></i>
+        </span>
+         {{ caller() }}
+    </div>
+{% endmacro %}
+
+{# 带有图标的输入字段 #}
+{% macro field_with_addon(fa_addon=None, color=None, kwargs={}, direct_error=None) %}
+
+    {% call field_addon(fa_addon, color) %}
+        {{ gen_field(kwargs, direct_error) }}
+    {% endcall %}
+
+{% endmacro %}
+
+{# 一般的输入字段 #}
+{% macro gen_field(kwargs={}, direct_error=None) %}
+
+    {% set _dummy = kwargs.setdefault('class', 'form-control') %}
+    {{ field(**kwargs)|safe }} 
+    {% if field.description %}
+        <p class="help-block">{{ field.description|safe }}</p>
+    {% endif %}
+    {% if direct_error %}
+        {% for e in field.errors if e is string %}
+            <span class="help-block input-errors">{{ e }}</span>
+        {% endfor %}
+    {% endif %}
+
+{% endmacro %}
+
+{# 渲染字段 #}
+{% macro render_field(field, kwargs={}, fa_addon=None, color=None) %}
+    {% set direct_error = h.is_field_error(field.errors) %}
+    
+    {% if h.is_required_form_field(field) %}
+        {% set color = 'font-red' %}
+    {% endif %}
+
+    <div class="form-group {{ ' has-error' if direct_error else '' }}">
+        <label class="col-md-3 control-label">{{ field.label.text }}
+            {% if h.is_required_form_field(field) %}
+                <strong style="color: red">&#42;</strong>
+                {%- else -%} &nbsp;
+            {%- endif %}
+        </label>
+        <div class="col-md-9">
+            {% if fa_addon %}
+                {{ field_with_addon(fa_addon, color, kwargs, direct_error) }}
+            {% else %}
+                {{ gen_field(kwargs, direct_error) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{# 渲染form表单主体 #}
+{% macro render_form_body(form) %}
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+        {% set kwargs = {} %}
+        {% set color = 'font-blue' %}
+        {{ render_field(field, kwargs, form.fa_add[field], color)}}
+    {% endfor %}
+{% endmacro %}
+
+{# 渲染form表单botton #}
+{% macro render_form_botton(cancel_url) %}
+    <div class="row">
+        <div class="col-md-offset-4 col-md-8">
+            <button type="submit" class="btn blue mt-ladda-btn ladda-button btn-circle btn-outline" data-style="slide-up" data-spinner-color="#333">
+                <span class="ladda-label">
+                    <i class="icon-layers"></i>
+                    {{ _gettext('Submit') }}
+                </span>
+                <span class="ladda-spinner"></span>
+            </button>
+            <button type="submit" class="btn blue mt-ladda-btn ladda-button btn-circle btn-outline" data-style="slide-up" data-spinner-color="#333">
+                <span class="ladda-label">
+                    <i class="icon-layers"></i>
+                    <a href="{{ cancel_url }}">{{ _gettext('Cancel') }}</a>
+                </span>
+                <span class="ladda-spinner"></span>
+            </button>
+        </div>
+    </div>
+{% endmacro %}
+
+{# form元素 #}
+{% macro form_tag(action=None) %}
+    <form action="{{ action or '' }}" method="POST" class="form-horizontal" role="login-form">
+        {{ caller() }}
+    </form>
+{% endmacro%}
+
+{# 渲染form #}
+{% macro render_form(form, action, cancel_url) %}
+    {% call form_tag(action) %}
+    <div class="form-body">
+        {{ render_form_body(form) }}
+    </div>
+    <div class="form-actions">
+        {{ render_form_botton(cancel_url) }}
+    </div>
+    {% endcall%}
+{% endmacro %}
+
+{# portlet头部 #}
+{% macro portlet_title(title) %}
+    <div class="portlet-title">
+        <div class="caption font-red-sunglo">
+            <i class="icon-user font-red-sunglo"></i>
+            <span class="caption-subject bold uppercase">{{ title }}</span>
+        </div>
+    </div>
+{% endmacro %}
+
+{# portlet主体 #}
+{% macro portlet_body() %}
+    <div class="portlet-body">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{# 渲染portlet #}
+{% macro portlet(title, form, action, cancel_url) %}
+    <div class="portlet light portlet-fit portlet-form bordered">
+         {{ portlet_title(title) }}
+         {% call portlet_body() %}
+             {{ render_form(form, action, cancel_url) }}
+         {% endcall %}
+    </div>
+{% endmacro %}
+
+{# 制定登陆form字段 #}
+{% macro login_field(field, kwargs={}, fa_addon=None, color="font-purple") %}
+    {% set direct_error = h.is_field_error(field.errors) %}
+    <div class="form-group form-md-line-input {{ ' has-error' if direct_error else 'has-success' }}">
+        <label for="{{ field.id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
+        <div class="col-md-6">
+            <div class="input-icon">
+                {% set _dummy = kwargs.setdefault('class', 'form-control') %}
+                {{ field(**kwargs)|safe }}
+                <div class="form-control-focus"></div>
+                {% if direct_error %}
+                    {% for e in field.errors if e is string %}
+                       <span class="help-block">{{ e }}</span>
+                    {% endfor %}
+                {% endif %}
+
+                {% if fa_addon %}
+                    <i class="fa {{ fa_addon }} {{ color }}"></i>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{# 制定登陆form底部 #}
+{% macro login_botton(checkbox_field, submit_field, checkbox_kwargs={}, submit_kwargs={}) %}
+    <div class="row">
+        <div class="col-md-offset-3 col-md-3">
+            <!-- 记住我字段开始 -->
+            <div class="md-checkbox-list">
+                <div class="md-checkbox">
+                    {% set _dummy = checkbox_kwargs.setdefault('class', 'md-check') %}
+                    {{ checkbox_field(**checkbox_kwargs)|safe }}
+                    <label for="{{ checkbox_field.id }}">
+                        <span></span>
+                        <span class="check"></span>
+                        <span class="box"></span>{{ checkbox_field.label.text }}</label>
+                </div>
+            </div>
+        </div>
+        <!-- 记住我字段结束 -->
+        <!-- 提交按钮开始 -->
+        <div class="col-md-3">
+            <div class="pull-right">
+                {% set _dummy = submit_kwargs.setdefault('class', 'btn green') %}
+                {{ submit_field(**submit_kwargs)|safe }}
+            </div>
+        </div>
+        <!-- 提交按钮结束 -->
+    </div>
+{% endmacro %}

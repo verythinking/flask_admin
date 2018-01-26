@@ -1,0 +1,24 @@
+{% macro dump_users(users) -%}
+<ul>
+    {%- for user in users %}
+    <li>
+        <p>{{ user.username|e }}</p>{{ caller(user) }}</li>
+    {%- endfor %}
+</ul>
+{%- endmacro %}
+
+
+
+{% macro show() %}
+    {% set list_of_user = [{'realname':'li', 'description':'g1'}]%}
+    {% call(user) dump_users(list_of_user) %}
+    <dl>
+        <dl>Realname</dl>
+        <dd>{{ user.realname|e }}</dd>
+        <dl>Description</dl>
+        <dd>{{ user.description }}</dd>
+    </dl>
+    {% endcall %}
+{% endmacro %}
+
+{{ show() }}

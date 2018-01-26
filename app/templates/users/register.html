@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% import 'macro/lib.html' as lib with context %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-offset-3">
+        {{ lib.portlet(title, form, action, cancel_url) }}
+    </div>
+</div>
+{% endblock %}

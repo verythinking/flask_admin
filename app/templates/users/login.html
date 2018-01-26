@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% import 'macro/_users_field.html' as field with context %}
+{% import 'macro/lib.html' as lib with context %}
 
 
 {% block page_content %}
@@ -11,12 +11,7 @@
         <!-- 窗口开始 -->
         <div class="portlet light portlet-fit portlet-form bordered">
             <!-- 窗口标题开始 -->
-            <div class="portlet-title">
-                <div class="caption font-red-sunglo">
-                    <i class="icon-user font-red-sunglo"></i>
-                    <span class="caption-subject bold uppercase">{{ page_title }}</span>
-                </div>
-            </div>
+            {{ lib.portlet_title(title) }}
             <!-- 窗口标题结束 -->
             <!-- 窗口主体开始 -->
             <div class="portlet-body">
@@ -24,13 +19,13 @@
                 <form action="{{ url_for('users.login') }}" method="POST" class="form-horizontal" role="login-form">
                     <div class="form-body">
                         {{ form.hidden_tag() }}
-                        {{ field.login_field(form.email) }}
-                        {{ field.login_field(form.password) }}
+                        {{ lib.login_field(form.email, fa_addon=form.fa_addon[form.email.id]) }}
+                        {{ lib.login_field(form.password, fa_addon=form.fa_addon[form.password.id]) }}
                     </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-12">
-                                {{ field.login_botton(form.remember, form.submit) }}
+                                {{ lib.login_botton(form.remember, form.submit) }}
                             </div>    
                         </div>
                     </div>
