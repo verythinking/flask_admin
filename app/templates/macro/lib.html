@@ -69,12 +69,12 @@
     {% endif %}
     {% set kwargs = {} %}
     {% if form.fa_add is defined %}
-        {% for field in form %}
+        {% for field in form if field.widget.input_type != 'hidden' %}
             {% set color = 'font-blue' %}
             {{ render_field(field, kwargs, form.fa_add[field], color)}}
         {% endfor %}
     {% else %}
-        {% for field in form %}
+        {% for field in form if field.widget.input_type != 'hidden' %}
             {{ render_field(field, kwargs)}}
         {% endfor %}
     {% endif %}
@@ -105,9 +105,11 @@
 
 {# form元素 #}
 {% macro form_tag(action=None) %}
+    <!-- 表单开始 -->
     <form action="{{ action or '' }}" method="POST" class="form-horizontal" role="login-form">
         {{ caller() }}
     </form>
+    <!-- 表单结束 -->
 {% endmacro%}
 
 {# 渲染form #}
@@ -201,3 +203,26 @@
         <!-- 提交按钮结束 -->
     </div>
 {% endmacro %}
+
+{# 制定登陆portlet #}
+{% macro login_portlet(title, form, action, cancel_url) %}
+    <div class="portlet light portlet-fit portlet-form bordered">
+        {{ portlet_title(title) }}
+        {% call portlet_body() %}
+            <div class="form-body">
+                {% call form_tag(action)%}
+                {{ form.hidden_tag() }}
+                {{ login_field(form.email, fa_addon=form.fa_addon[form.email.id]) }} 
+                {{ login_field(form.password, fa_addon=form.fa_addon[form.password.id]) }}
+                {% endcall %}
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ login_botton(form.remember, form.submit) }}
+                    </div>
+                </div>
+            </div>
+        {% endcall%}
+    </div>
+{% endmacro%}

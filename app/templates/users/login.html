@@ -9,31 +9,7 @@
 <div class="row">
     <div class="col-md-offset-3 col-md-6">
         <!-- 窗口开始 -->
-        <div class="portlet light portlet-fit portlet-form bordered">
-            <!-- 窗口标题开始 -->
-            {{ lib.portlet_title(title) }}
-            <!-- 窗口标题结束 -->
-            <!-- 窗口主体开始 -->
-            <div class="portlet-body">
-                <!-- 登陆表单开始 -->
-                <form action="{{ url_for('users.login') }}" method="POST" class="form-horizontal" role="login-form">
-                    <div class="form-body">
-                        {{ form.hidden_tag() }}
-                        {{ lib.login_field(form.email, fa_addon=form.fa_addon[form.email.id]) }}
-                        {{ lib.login_field(form.password, fa_addon=form.fa_addon[form.password.id]) }}
-                    </div>
-                    <div class="form-actions">
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{ lib.login_botton(form.remember, form.submit) }}
-                            </div>    
-                        </div>
-                    </div>
-                </form>
-                <!-- 登陆表单结束 -->
-            </div>
-            <!-- 窗口主体结束 -->
-        </div>
+        {{ lib.login_portlet(title, form, action, cancel_url) }}
         <!-- 窗口结束 -->
     </div>
 </div>

@@ -7,3 +7,5 @@ NAME = u'悟禅'
 HOME = u'首页'
 
 LOGIN_TITLE = u'登陆'
+
+REGISTER_TITLE = u'注册'

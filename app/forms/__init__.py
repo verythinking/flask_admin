@@ -1,6 +1,6 @@
 #! -*-coding:utf-8 -*-
 
-from users import UsersLoginForm
+from users import UsersLoginForm, UsersRegisterForm
 
 
-__all__ = ['UsersLoginForm']
+__all__ = ['UsersLoginForm', 'UsersRegisterForm']

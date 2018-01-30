@@ -6,10 +6,11 @@ from flask_admin.helpers import get_form_data, get_redirect_target
 from flask_login import login_user
 from flask_security.decorators import anonymous_user_required
 from flask_security.views import _commit
+from flask_security.registerable import register_user
 
-from app.forms import UsersLoginForm
+from app.forms import UsersLoginForm, UsersRegisterForm
 from . import SqlaView
-from global_cont import LOGIN_TITLE
+from global_cont import LOGIN_TITLE, REGISTER_TITLE
 
 
 class UsersView(SqlaView):
@@ -28,6 +29,9 @@ class UsersView(SqlaView):
         # 定义登录表单类
         self._login_form_class = UsersLoginForm
 
+        # 定义注册表单类
+        self._register_form_class = UsersRegisterForm
+
     def login_form(self, obj=None):
 
         """
@@ -35,6 +39,13 @@ class UsersView(SqlaView):
         """
 
         return self._login_form_class(get_form_data(), obj=obj)
+
+    def register_form(self, obj=None):
+
+        """
+           用户模型的注册form
+        """
+        return self._register_form_class(get_form_data(), obj=obj)
 
     @expose('/login/', methods=('GET', 'POST'))
     @anonymous_user_required
@@ -44,8 +55,8 @@ class UsersView(SqlaView):
             用户登录视图
         """
 
-        page_title = LOGIN_TITLE
-        return_url = get_redirect_target() or self.get_url('.index_view')
+        title = LOGIN_TITLE
+        return_url = get_redirect_target() or self.get_url('admin.index')
 
         form = self.login_form()
 
@@ -57,5 +68,24 @@ class UsersView(SqlaView):
 
         return self.render(template,
                            form=form,
-                           page_title=page_title,
+                           title=title,
+                           return_url=return_url)
+
+    @expose('/register/', methods=('GET', 'POST'))
+    def register(self):
+        title = REGISTER_TITLE
+        return_url = get_redirect_target or self.get_url('admin.index')
+
+        form = self.register_form()
+        self._remove_fields_from_form_instance(['submit'], form)
+
+        if self.validate_form(form):
+            user = register_user(**form.to_dict())
+            form.user = user
+
+        template = self.register_template
+
+        return self.render(template,
+                           form=form,
+                           title=title,
                            return_url=return_url)

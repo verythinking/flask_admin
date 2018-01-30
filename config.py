@@ -4,6 +4,8 @@
 class Config(object):
     """ 配置类 """
     SECRET_KEY = 'if i dont tell you can you guess'
+    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_PASSWORD_SALT = 'this is password security'
 
 
 class DevelopConfig(Config):

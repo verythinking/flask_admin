@@ -5,3 +5,4 @@ Flask-BabelEx
 flask_sqlalchemy
 flask_security
 pymysql
+bcrypt
