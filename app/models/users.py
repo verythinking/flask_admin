@@ -17,3 +17,5 @@ class Users(db.Model, UserMixin):
     telephone = db.Column(db.String(255))
     email = db.Column(db.String(255))
     active = db.Column(db.Boolean)
+
+    roles = db.Column(db.Integer, db.ForeignKey('roles.id'))
